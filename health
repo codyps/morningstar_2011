@@ -55,10 +55,16 @@ class RangeRule:
 		return self.id
 
 	def passes(self, patient_data):
-		test_data = patient_data.tests[self.name].data
-		if (self.min < test_data < self.max):
+		try:
+			test_data = patient_data.tests[self.name].data
+			if (self.min < test_data < self.max):
+				return True
+			else:
+				return False
+		except KeyError:
 			return True
-		return False
+
+		return True
 
 def cmp_func(cmp_str):
 	fs = {
@@ -87,13 +93,19 @@ class InteractionRule:
 		return self.id
 
 	def passes(self, patient_data):
-		td1 = patient_data.tests[self.test1].data
-		td2 = patient_data.tests[self.test2].data
+		try:
+			td1 = patient_data.tests[self.test1].data
+			td2 = patient_data.tests[self.test2].data
 
-		if (self.cmp1(td1, self.val1) and
-			self.cmp2(td2, self.val2)):
-			return False
+			if (self.cmp1(td1, self.val1) and
+				self.cmp2(td2, self.val2)):
+				return False
+			return True
+		except KeyError:
+			return True
+
 		return True
+
 
 class Rules:
 	def __init__(self, fieldnames, mk_rule, name):
