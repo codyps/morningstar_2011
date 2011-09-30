@@ -1,0 +1,4 @@
+1	Test A	>	0.35	Test B	<	15
+2	Test C	<=	2.0	Test A	>	0.4
+3	Test B	<=	12	Test D	>	3
+
