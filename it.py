@@ -140,24 +140,28 @@ class RangeRules(Rules):
 			RangeRule, name)
 
 def main(args):
+	parser = argparse.ArgumentParser(description='Flag test results.')
+	parser.add_argument('--range_rule', '-r', action='append')
+	parser.add_argument('--interaction', '-i', action='append')
+	parser.add_argument('--patient', '-p', action='append')
 
-	if (len(args) <> 4):
-		print('usage: health <range rule file> <interaction rule file> <patient file>')
-	rr_file = args[1]
-	ir_file = args[2]
-	patient_file = args[3]
+	args = parser.parse_args()
 
 	rr = RangeRules('Range')
-	rr.add_rules_from_file(rr_file)
+	for rr_f in args.range_rule:
+		rr.add_rules_from_file(rr_f)
 
 	ir = InteractionRules('Interaction')
-	ir.add_rules_from_file(ir_file)
+	for ir_f in args.interaction:
+		ir.add_rules_from_file(ir_f)
 
-	p = Patient(open(patient_file, 'r'))
+	ps = []
+	for p_f in args.patient:
+		ps.append(Patient(open(p_f, 'r')))
 
-	p.check([rr, ir])
-
-	print(p)
+	for p in ps:
+		p.check([rr, ir])
+		print(p)
 
 if (__name__ == "__main__"):
 	main(argv)
