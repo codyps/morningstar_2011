@@ -153,19 +153,21 @@ class RangeRules(Rules):
 
 def main(args):
 	parser = argparse.ArgumentParser(description='Flag test results.')
-	parser.add_argument('--range_rule', '-r', action='append')
-	parser.add_argument('--interaction', '-i', action='append')
-	parser.add_argument('--patient', '-p', action='append')
+	parser.add_argument('--range_rule', '-r', action='append', nargs='+')
+	parser.add_argument('--interaction', '-i', action='append', nargs='+')
+	parser.add_argument('--patient', '-p', action='append', nargs='+', required=True)
 
 	args = parser.parse_args()
 
 	rr = RangeRules('Range')
-	for rr_f in args.range_rule:
-		rr.add_rules_from_file(rr_f)
+	if args.range_rule:
+		for rr_f in args.range_rule:
+			rr.add_rules_from_file(rr_f)
 
 	ir = InteractionRules('Interaction')
-	for ir_f in args.interaction:
-		ir.add_rules_from_file(ir_f)
+	if args.interaction:
+		for ir_f in args.interaction:
+			ir.add_rules_from_file(ir_f)
 
 	ps = []
 	for p_f in args.patient:
